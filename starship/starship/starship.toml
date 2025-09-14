@@ -1,0 +1,16 @@
+# Prompt modules
+format = """
+$directory\
+$git_branch\
+$git_status\
+$fill\
+$time\
+$line_break\
+$character"""
+
+[fill]
+symbol = "-"
+style = 'yellow'
+
+[time]
+disabled = false
