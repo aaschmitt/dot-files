@@ -7,5 +7,7 @@ return {
         vim.api.nvim_set_hl(0, "NeoTreeGitAdded", { link = "GruvboxBlue" })
         vim.api.nvim_set_hl(0, "NeoTreeGitRemoved", { link = "GruvboxRed" })
         vim.api.nvim_set_hl(0, "NeoTreeGitModified", { link = "GruvboxGreen" })
+        vim.api.nvim_set_hl(0, "NeoTreeDirectoryName", { link = "GruvboxYellowBold" })
+        vim.api.nvim_set_hl(0, "NeoTreeDirectoryIcon", { link = "GruvboxYellowBold" })
 	end,
 }
