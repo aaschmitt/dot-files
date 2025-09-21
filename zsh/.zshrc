@@ -3,6 +3,7 @@
 
 export ZSH="$HOME/.zsh"
 export NVIM="$HOME/.config/nvim"
+export NVIM_LOGS="$HOME/.local/state/nvim"
 export DOTFILES="$HOME/Projects/dot-files"
 export EDITOR=nvim
 
