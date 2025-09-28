@@ -14,6 +14,7 @@ done
 
 plug "zsh-users/zsh-autosuggestions"
 plug "zdharma-continuum/fast-syntax-highlighting"
+plug "marlonrichert/zsh-autocomplete"
 # plug "zsh-users/zsh-syntax-highlighting"
 # plug "zap-zsh/supercharge"
 # plug "zap-zsh/zap-prompt"

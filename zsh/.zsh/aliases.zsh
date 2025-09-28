@@ -2,6 +2,7 @@
 alias cat='bat'
 alias ls='exa --icons'
 alias vim='nvim'
+alias battery='acpi -b'
 
 # Configurations
 alias hyprland_conf='vim $HOME/.config/hypr/hyprland.conf'
@@ -31,6 +32,9 @@ glog() {
 
 # Navigation
 alias sandbox='cd $HOME/sandbox'
+alias projects='cd $HOME/Projects'
 
+# Arch linux specific
 alias sys_update='sudo pacman -Syu'
+alias install='sudo pacman -S'
 
