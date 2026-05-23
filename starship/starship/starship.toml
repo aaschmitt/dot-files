@@ -5,6 +5,7 @@ $hostname\
 $directory\
 $git_branch\
 $git_status\
+$python\
 $fill\
 $time\
 $line_break\
@@ -70,3 +71,5 @@ Unknown = " "
 Void = " "
 Windows = "󰍲 "
 
+[python]
+format = "[$virtualenv]($style) "
