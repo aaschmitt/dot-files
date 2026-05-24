@@ -1,0 +1,7 @@
+{{- if ne .chezmoi.os "linux" }}
+dot_config/hypr
+{{- end }}
+{{- if ne .chezmoi.os "darwin" }}
+dot_config/aerospace
+Library
+{{- end }}
