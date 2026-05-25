@@ -1,125 +1,141 @@
-# AeroSpace tiling window manager
-# Docs: https://nikitabobko.github.io/AeroSpace/guide
-#
-# Stow:  stow --target=$HOME/.config/ aerospace
-# Result: ~/.config/aerospace/aerospace.toml
+config-version = 2
 
-# ============================================================
-# CORE
-# ============================================================
-
+after-startup-command = [
+'exec-and-forget open -a Firefox',
+'exec-and-forget open -a "Google Chrome"',
+'exec-and-forget open -a Slack',
+'exec-and-forget open -a Ghostty',
+'exec-and-forget open -a MeshClaw',
+'exec-and-forget open -a "Microsoft Outlook"',
+]
 start-at-login = true
 
-after-startup-command = []
-exec-on-workspace-change = []
-
-# Normalize the container tree so layouts stay sane after moves/closes.
 enable-normalization-flatten-containers = true
 enable-normalization-opposite-orientation-for-nested-containers = true
 
-# Default layout when a workspace is empty.
+accordion-padding = 30
 default-root-container-layout = 'tiles'
 default-root-container-orientation = 'auto'
 
-# Don't surface macOS-hidden apps when switching workspaces.
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 automatically-unhide-macos-hidden-apps = false
 
-# Cursor follows focus across monitors.
-on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+# --- App-to-workspace assignments ---
+[[on-window-detected]]
+if.app-id = 'org.mozilla.firefox'
+run = 'move-node-to-workspace F'
 
-# ============================================================
-# GAPS  (Hyprland config used gaps_in=1, gaps_out=1 — same vibe)
-# ============================================================
+[[on-window-detected]]
+if.app-id = 'com.google.Chrome'
+run = 'move-node-to-workspace C'
+
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = 'move-node-to-workspace S'
+
+# https://ghostty.org/docs/help/macos-tiling-wms
+[[on-window-detected]]
+if.app-id = 'com.mitchellh.ghostty'
+run = ['layout floating', 'move-node-to-workspace T']
+
+[[on-window-detected]]
+if.app-id = 'com.amazon.meshclaw'
+run = 'move-node-to-workspace M'
+
+[[on-window-detected]]
+if.app-id = 'com.microsoft.Outlook'
+run = 'move-node-to-workspace O'
+
+[[on-window-detected]]
+if.app-id = 'com.amazon.agentspaces-desktop'
+run = 'move-node-to-workspace W'
+
+[key-mapping]
+preset = 'qwerty'
 
 [gaps]
-inner.horizontal = 4
-inner.vertical   = 4
-outer.left       = 4
-outer.bottom     = 4
-outer.top        = 4
-outer.right      = 4
-
-# ============================================================
-# KEYBINDINGS
-# ============================================================
-# Conflict notes (AeroSpace intercepts before Ghostty sees the key):
-#   - ctrl-shift-left/right     was Ghostty prev/next tab   -> now workspace prev/next
-#   - ctrl-shift-minus          was Ghostty new_split:down  -> now resize shrink
-#   - ctrl-shift-backslash      was Ghostty new_split:right -> now (unbound, free)
-#   - ctrl-0, ctrl-4            were Ghostty cursor remaps  -> use ctrl-a / ctrl-e directly
-# Bare shift+arrows for focus will intercept text-selection shift+arrow system-wide.
+inner.horizontal = 0
+inner.vertical = 0
+outer.left = 0
+outer.bottom = 0
+outer.top = 0
+outer.right = 0
 
 [mode.main.binding]
+alt-slash = 'layout tiles horizontal vertical'
+alt-comma = 'layout accordion horizontal vertical'
 
-# --- Focus (mirrors Ghostty goto_split:left/right/top/bottom) ---
-shift-left  = 'focus left'
-shift-down  = 'focus down'
-shift-up    = 'focus up'
-shift-right = 'focus right'
+# Focus
+alt-h = 'focus left'
+alt-j = 'focus down'
+alt-k = 'focus up'
+alt-l = 'focus right'
 
-# --- Move focused window ---
-# ctrl-alt avoids stomping Ghostty ctrl-shift-arrow tab nav muscle (which we
-# redirect to workspace nav below, so move-window needs a different combo).
-ctrl-alt-left  = 'move left'
-ctrl-alt-down  = 'move down'
-ctrl-alt-up    = 'move up'
-ctrl-alt-right = 'move right'
+# Move
+alt-shift-h = 'move left'
+alt-shift-j = 'move down'
+alt-shift-k = 'move up'
+alt-shift-l = 'move right'
 
-# --- Resize ---
-ctrl-shift-equal = 'resize smart +50'
-ctrl-shift-minus = 'resize smart -50'
+# Resize
+alt-minus = 'resize smart -50'
+alt-equal = 'resize smart +50'
 
-# --- Layout toggles ---
-ctrl-slash = 'layout tiles horizontal vertical'
-ctrl-comma = 'layout accordion horizontal vertical'
+# App workspaces
+ctrl-f = 'workspace F' # Firefox
+ctrl-g = 'workspace C' # Chrome
+ctrl-s = 'workspace S' # Slack
+ctrl-q = 'workspace T' # Terminal (Ghostty)
+ctrl-m = 'workspace M' # MeshClaw
+ctrl-o = 'workspace O' # Outlook
+ctrl-w = 'workspace W' # AgentSpaces Desktop
 
-# --- Fullscreen ---
-ctrl-f = 'fullscreen'
+# Move node to app workspace
+ctrl-shift-f = 'move-node-to-workspace F'
+ctrl-shift-c = 'move-node-to-workspace C'
+ctrl-shift-s = 'move-node-to-workspace S'
+ctrl-shift-t = 'move-node-to-workspace T' # Terminal (Ghostty)
+ctrl-shift-m = 'move-node-to-workspace M'
+ctrl-shift-o = 'move-node-to-workspace O'
+ctrl-shift-w = 'move-node-to-workspace W' # AgentSpaces Desktop
 
-# --- Workspace switching (1-10) ---
-ctrl-1 = 'workspace 1'
-ctrl-2 = 'workspace 2'
-ctrl-3 = 'workspace 3'
-ctrl-4 = 'workspace 4'
-ctrl-5 = 'workspace 5'
-ctrl-6 = 'workspace 6'
-ctrl-7 = 'workspace 7'
-ctrl-8 = 'workspace 8'
-ctrl-9 = 'workspace 9'
-ctrl-0 = 'workspace 10'
+# Workspaces
+alt-1 = 'workspace 1'
+alt-2 = 'workspace 2'
+alt-3 = 'workspace 3'
+alt-4 = 'workspace 4'
+alt-5 = 'workspace 5'
+alt-6 = 'workspace 6'
+alt-7 = 'workspace 7'
+alt-8 = 'workspace 8'
+alt-9 = 'workspace 9'
 
-# --- Move focused window to workspace ---
-ctrl-shift-1 = 'move-node-to-workspace 1'
-ctrl-shift-2 = 'move-node-to-workspace 2'
-ctrl-shift-3 = 'move-node-to-workspace 3'
-ctrl-shift-4 = 'move-node-to-workspace 4'
-ctrl-shift-5 = 'move-node-to-workspace 5'
-ctrl-shift-6 = 'move-node-to-workspace 6'
-ctrl-shift-7 = 'move-node-to-workspace 7'
-ctrl-shift-8 = 'move-node-to-workspace 8'
-ctrl-shift-9 = 'move-node-to-workspace 9'
-ctrl-shift-0 = 'move-node-to-workspace 10'
+# Move node to workspace
+alt-shift-1 = 'move-node-to-workspace 1'
+alt-shift-2 = 'move-node-to-workspace 2'
+alt-shift-3 = 'move-node-to-workspace 3'
+alt-shift-4 = 'move-node-to-workspace 4'
+alt-shift-5 = 'move-node-to-workspace 5'
+alt-shift-6 = 'move-node-to-workspace 6'
+alt-shift-7 = 'move-node-to-workspace 7'
+alt-shift-8 = 'move-node-to-workspace 8'
+alt-shift-9 = 'move-node-to-workspace 9'
 
-# --- Workspace cycling (reuses Ghostty's prev/next tab muscle memory) ---
-ctrl-shift-left  = 'workspace prev'
-ctrl-shift-right = 'workspace next'
+alt-tab = 'workspace-back-and-forth'
+alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
-# --- Back-and-forth between last two workspaces ---
-ctrl-tab = 'workspace-back-and-forth'
+alt-shift-semicolon = 'mode service'
 
-# --- Enter service mode (reload/reset/float) ---
-ctrl-shift-semicolon = 'mode service'
-
-# ============================================================
-# SERVICE MODE — one-shot ops, then back to main
-# ============================================================
+# Re-sync all app windows to their assigned workspaces
+ctrl-shift-r = 'exec-and-forget aerospace list-windows --all --format "%{window-id} %{app-bundle-id}" | while read wid bid; do case "$bid" in com.tinyspeck.slackmacgap) aerospace move-node-to-workspace S --window-id "$wid" ;; org.mozilla.firefox) aerospace move-node-to-workspace F --window-id "$wid" ;; com.google.Chrome) aerospace move-node-to-workspace C --window-id "$wid" ;; com.mitchellh.ghostty) aerospace move-node-to-workspace T --window-id "$wid" ;; com.amazon.meshclaw) aerospace move-node-to-workspace M --window-id "$wid" ;; com.microsoft.Outlook) aerospace move-node-to-workspace O --window-id "$wid" ;; esac; done'
 
 [mode.service.binding]
-esc       = ['reload-config', 'mode main']
-r         = ['flatten-workspace-tree', 'mode main']
-f         = ['layout floating tiling', 'mode main']
+esc = ['reload-config', 'mode main']
+r = ['flatten-workspace-tree', 'mode main']
+f = ['layout floating tiling', 'mode main']
 backspace = ['close-all-windows-but-current', 'mode main']
 
-# Push current workspace to next/prev monitor
-shift-left  = ['move-workspace-to-monitor prev', 'mode main']
-shift-right = ['move-workspace-to-monitor next', 'mode main']
+alt-shift-h = ['join-with left', 'mode main']
+alt-shift-j = ['join-with down', 'mode main']
+alt-shift-k = ['join-with up', 'mode main']
+alt-shift-l = ['join-with right', 'mode main']
