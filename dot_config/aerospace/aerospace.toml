@@ -4,8 +4,7 @@ after-startup-command = [
 'exec-and-forget open -a Firefox',
 'exec-and-forget open -a "Google Chrome"',
 'exec-and-forget open -a Ghostty',
-'exec-and-forget open -a ChatGPT',
-'exec-and-forget open -a Notion',
+'exec-and-forget open -a Claude',
 'exec-and-forget open -a "Microsoft Outlook"',
 ]
 start-at-login = true
@@ -35,12 +34,8 @@ if.app-id = 'com.mitchellh.ghostty'
 run = ['layout floating', 'move-node-to-workspace T']
 
 [[on-window-detected]]
-if.app-id = 'com.openai.codex'
+if.app-id = 'com.anthropic.claudefordesktop'
 run = 'move-node-to-workspace M'
-
-[[on-window-detected]]
-if.app-id = 'notion.id'
-run = 'move-node-to-workspace N'
 
 [[on-window-detected]]
 if.app-id = 'com.microsoft.Outlook'
@@ -89,8 +84,7 @@ alt-equal = 'resize smart +50'
 ctrl-f = 'workspace F' # Firefox
 ctrl-g = 'workspace C' # Chrome
 ctrl-q = 'workspace T' # Terminal (Ghostty)
-ctrl-m = ['exec-and-forget open -a ChatGPT', 'workspace M']
-ctrl-n = ['exec-and-forget open -a Notion', 'workspace N']
+ctrl-m = 'workspace M' # Claude Desktop
 ctrl-o = 'workspace O' # Outlook
 ctrl-v = 'workspace V' # VSCode
 ctrl-w = 'workspace W' # Roblox Studio
@@ -100,7 +94,6 @@ ctrl-shift-f = 'move-node-to-workspace F'
 ctrl-shift-c = 'move-node-to-workspace C'
 ctrl-shift-t = 'move-node-to-workspace T' # Terminal (Ghostty)
 ctrl-shift-m = 'move-node-to-workspace M'
-ctrl-shift-n = 'move-node-to-workspace N'
 ctrl-shift-o = 'move-node-to-workspace O'
 ctrl-shift-v = 'move-node-to-workspace V' # VSCode
 ctrl-shift-w = 'move-node-to-workspace W' # Roblox Studio
@@ -133,7 +126,7 @@ alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 alt-shift-semicolon = 'mode service'
 
 # Re-sync all app windows to their assigned workspaces
-ctrl-shift-r = 'exec-and-forget aerospace list-windows --all --format "%{window-id} %{app-bundle-id}" | while read wid bid; do case "$bid" in org.mozilla.firefox) aerospace move-node-to-workspace F --window-id "$wid" ;; com.google.Chrome) aerospace move-node-to-workspace C --window-id "$wid" ;; com.mitchellh.ghostty) aerospace move-node-to-workspace T --window-id "$wid" ;; com.openai.codex) aerospace move-node-to-workspace M --window-id "$wid" ;; notion.id) aerospace move-node-to-workspace N --window-id "$wid" ;; com.microsoft.Outlook) aerospace move-node-to-workspace O --window-id "$wid" ;; com.microsoft.VSCode) aerospace move-node-to-workspace V --window-id "$wid" ;; com.Roblox.RobloxStudio) aerospace move-node-to-workspace W --window-id "$wid" ;; esac; done'
+ctrl-shift-r = 'exec-and-forget aerospace list-windows --all --format "%{window-id} %{app-bundle-id}" | while read wid bid; do case "$bid" in org.mozilla.firefox) aerospace move-node-to-workspace F --window-id "$wid" ;; com.google.Chrome) aerospace move-node-to-workspace C --window-id "$wid" ;; com.mitchellh.ghostty) aerospace move-node-to-workspace T --window-id "$wid" ;; com.anthropic.claudefordesktop) aerospace move-node-to-workspace M --window-id "$wid" ;; com.microsoft.Outlook) aerospace move-node-to-workspace O --window-id "$wid" ;; com.microsoft.VSCode) aerospace move-node-to-workspace V --window-id "$wid" ;; com.Roblox.RobloxStudio) aerospace move-node-to-workspace W --window-id "$wid" ;; esac; done'
 
 [mode.service.binding]
 esc = ['reload-config', 'mode main']
