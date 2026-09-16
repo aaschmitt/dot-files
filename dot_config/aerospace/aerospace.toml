@@ -35,6 +35,10 @@ if.app-id = 'com.mitchellh.ghostty'
 run = ['layout floating', 'move-node-to-workspace T']
 
 [[on-window-detected]]
+if.app-id = 'com.openai.codex'
+run = 'move-node-to-workspace M'
+
+[[on-window-detected]]
 if.app-id = 'notion.id'
 run = 'move-node-to-workspace N'
 
@@ -129,7 +133,7 @@ alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 alt-shift-semicolon = 'mode service'
 
 # Re-sync all app windows to their assigned workspaces
-ctrl-shift-r = 'exec-and-forget aerospace list-windows --all --format "%{window-id} %{app-bundle-id}" | while read wid bid; do case "$bid" in org.mozilla.firefox) aerospace move-node-to-workspace F --window-id "$wid" ;; com.google.Chrome) aerospace move-node-to-workspace C --window-id "$wid" ;; com.mitchellh.ghostty) aerospace move-node-to-workspace T --window-id "$wid" ;; notion.id) aerospace move-node-to-workspace N --window-id "$wid" ;; org.godotengine.godot) aerospace move-node-to-workspace O --window-id "$wid" ;; com.microsoft.VSCode) aerospace move-node-to-workspace V --window-id "$wid" ;; com.Roblox.RobloxStudio) aerospace move-node-to-workspace W --window-id "$wid" ;; esac; done'
+ctrl-shift-r = 'exec-and-forget aerospace list-windows --all --format "%{window-id} %{app-bundle-id}" | while read wid bid; do case "$bid" in org.mozilla.firefox) aerospace move-node-to-workspace F --window-id "$wid" ;; com.google.Chrome) aerospace move-node-to-workspace C --window-id "$wid" ;; com.mitchellh.ghostty) aerospace move-node-to-workspace T --window-id "$wid" ;; com.openai.codex) aerospace move-node-to-workspace M --window-id "$wid" ;; notion.id) aerospace move-node-to-workspace N --window-id "$wid" ;; org.godotengine.godot) aerospace move-node-to-workspace O --window-id "$wid" ;; com.microsoft.VSCode) aerospace move-node-to-workspace V --window-id "$wid" ;; com.Roblox.RobloxStudio) aerospace move-node-to-workspace W --window-id "$wid" ;; esac; done'
 
 [mode.service.binding]
 esc = ['reload-config', 'mode main']
