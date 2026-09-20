@@ -32,3 +32,24 @@ chezmoi edit ~/.zshrc
 # Pull live edits back into the source
 chezmoi re-add ~/.zshrc
 ```
+
+## Skills
+
+After the initial `chezmoi apply`, synchronize personal and selected external
+Codex skills:
+
+```sh
+$HOME/.local/bin/skills-sync
+```
+
+The command clones or fast-forwards the private `aaschmitt/skills` repository
+and Matt Pocock's public skills repository, then refreshes `~/.agents/skills`.
+Only `grill-with-docs` and its required `grilling` and `domain-modeling`
+dependencies are selected from Matt's repository.
+
+On later updates, run:
+
+```sh
+chezmoi apply -v
+skills-sync
+```

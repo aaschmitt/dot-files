@@ -1,21 +1,93 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-skills_checkout="$HOME/workspace/github.com/aaschmitt/skills"
-skills_remote="git@github.com:aaschmitt/skills.git"
+personal_checkout="$HOME/workspace/github.com/aaschmitt/skills"
+matt_checkout="$HOME/workspace/github.com/mattpocock/skills"
+destination="$HOME/.agents/skills"
+external_overlay="$HOME/.local/share/agent-skills/mattpocock"
 
-if [[ ! -e "$skills_checkout" ]]; then
-  mkdir -p "$(dirname "$skills_checkout")"
-  git clone "$skills_remote" "$skills_checkout"
-elif [[ ! -d "$skills_checkout/.git" ]]; then
-  printf 'error: %s exists but is not a Git repository\n' "$skills_checkout" >&2
-  exit 1
-else
-  if [[ -n "$(git -C "$skills_checkout" status --porcelain)" ]]; then
-    printf 'error: skills checkout has uncommitted changes; commit or stash them first\n' >&2
+sync_repository() {
+  local checkout="$1"
+  local remote="$2"
+
+  if [[ ! -e "$checkout" ]]; then
+    mkdir -p "$(dirname "$checkout")"
+    git clone "$remote" "$checkout"
+  elif [[ ! -d "$checkout/.git" ]]; then
+    printf 'error: %s exists but is not a Git repository\n' "$checkout" >&2
+    exit 1
+  else
+    if [[ -n "$(git -C "$checkout" status --porcelain)" ]]; then
+      printf 'error: %s has uncommitted changes; commit or stash them first\n' "$checkout" >&2
+      exit 1
+    fi
+    git -C "$checkout" pull --ff-only
+  fi
+}
+
+materialize_external_skill() {
+  local source_directory="$1"
+  local skill_name
+  local overlay_directory
+  local temporary_skill_file
+
+  skill_name="$(basename "$source_directory")"
+  overlay_directory="$external_overlay/$skill_name"
+  temporary_skill_file="$overlay_directory/SKILL.md.tmp"
+
+  mkdir -p "$overlay_directory"
+  rsync -a --delete "$source_directory/" "$overlay_directory/"
+  awk '!/^disable-model-invocation:/' "$source_directory/SKILL.md" > "$temporary_skill_file"
+  mv "$temporary_skill_file" "$overlay_directory/SKILL.md"
+
+  printf 'prepared Codex overlay for %s\n' "$skill_name"
+}
+
+link_external_skill() {
+  local source_directory="$1"
+  local skill_name
+  local target
+  local current_target
+
+  skill_name="$(basename "$source_directory")"
+  target="$destination/$skill_name"
+
+  if [[ ! -f "$source_directory/SKILL.md" ]]; then
+    printf 'error: missing SKILL.md for selected skill: %s\n' "$source_directory" >&2
     exit 1
   fi
-  git -C "$skills_checkout" pull --ff-only
-fi
 
-"$skills_checkout/scripts/link-skills.sh"
+  if [[ -L "$target" ]]; then
+    current_target="$(readlink "$target")"
+    case "$current_target" in
+      "$matt_checkout"/skills/*|"$external_overlay"/*)
+        ln -sfn "$source_directory" "$target"
+        ;;
+      *)
+        printf 'error: refusing to replace unrelated symlink: %s\n' "$target" >&2
+        exit 1
+        ;;
+    esac
+  elif [[ -e "$target" ]]; then
+    printf 'error: refusing to replace existing path: %s\n' "$target" >&2
+    exit 1
+  else
+    ln -s "$source_directory" "$target"
+  fi
+
+  printf 'linked external skill %s -> %s\n' "$skill_name" "$source_directory"
+}
+
+sync_repository "$personal_checkout" "git@github.com:aaschmitt/skills.git"
+"$personal_checkout/scripts/link-skills.sh"
+
+sync_repository "$matt_checkout" "https://github.com/mattpocock/skills.git"
+mkdir -p "$destination"
+
+materialize_external_skill "$matt_checkout/skills/engineering/grill-with-docs"
+materialize_external_skill "$matt_checkout/skills/productivity/grilling"
+materialize_external_skill "$matt_checkout/skills/engineering/domain-modeling"
+
+link_external_skill "$external_overlay/grill-with-docs"
+link_external_skill "$external_overlay/grilling"
+link_external_skill "$external_overlay/domain-modeling"
