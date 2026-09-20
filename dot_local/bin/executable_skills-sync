@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+skills_checkout="$HOME/workspace/github.com/aaschmitt/skills"
+skills_remote="git@github.com:aaschmitt/skills.git"
+
+if [[ ! -e "$skills_checkout" ]]; then
+  mkdir -p "$(dirname "$skills_checkout")"
+  git clone "$skills_remote" "$skills_checkout"
+elif [[ ! -d "$skills_checkout/.git" ]]; then
+  printf 'error: %s exists but is not a Git repository\n' "$skills_checkout" >&2
+  exit 1
+else
+  if [[ -n "$(git -C "$skills_checkout" status --porcelain)" ]]; then
+    printf 'error: skills checkout has uncommitted changes; commit or stash them first\n' >&2
+    exit 1
+  fi
+  git -C "$skills_checkout" pull --ff-only
+fi
+
+"$skills_checkout/scripts/link-skills.sh"
