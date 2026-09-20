@@ -7,7 +7,7 @@ export ZSH="$HOME/.zsh"
 export NVIM="$HOME/.config/nvim"
 export NVIM_LOGS="$HOME/.local/state/nvim"
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    export DOTFILES="$HOME/Documents/Repos/dot-files"
+    export DOTFILES="$HOME/workspace/github.com/aaschmitt/dot-files"
 else
     export DOTFILES="$HOME/Projects/dot-files"
 fi

@@ -30,8 +30,8 @@ alias gst='git status'
 # Navigation
 alias sandbox='cd $HOME/sandbox'
 alias projects='cd $HOME/Projects'
+alias wp='cd $HOME/workspace'
 
 # Arch linux specific
 alias sys_update='sudo pacman -Syu'
 alias install='sudo pacman -S'
-

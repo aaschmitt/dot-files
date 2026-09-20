@@ -18,7 +18,7 @@ OS scoping lives in `.chezmoiignore`:
 
 ```sh
 # Initial setup (points chezmoi at this repo without moving it)
-chezmoi init --source=$HOME/Documents/Repos/dot-files
+chezmoi init --source=$HOME/workspace/github.com/aaschmitt/dot-files
 
 # Preview what apply would change
 chezmoi diff
